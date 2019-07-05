@@ -1,0 +1,2 @@
+* Doom Emacs Config
+Welcome to my configuration for my doom emacs set up
