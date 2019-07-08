@@ -9,7 +9,9 @@
 
 ;; elpy configs
 (elpy-enable)
-(elpy-use-ipython)
+
+;;(setq python-shell-interpreter "ipython"
+;;      python-shell-interpreter-args "-i --simple-prompt")
 
 ;; use flycheck not flymake with elpy
 (when (require 'flycheck nil t)
