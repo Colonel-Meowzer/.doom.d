@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: equation
+# key: equation
+# --
+\begin{equation}
+\begin{split}
+${1:equation}
+\end{split}
+\end{equation}

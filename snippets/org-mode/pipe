@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ||
+# uuid:
+# key: ||
+# condition: t
+# --
+\|${1:a} \|
