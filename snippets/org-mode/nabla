@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: norm
+# name: nabla
 # uuid:
-# key: ||
+# key: nab
 # condition: t
 # --
-\|${1:a}\|
+\nabla

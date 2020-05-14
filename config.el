@@ -70,3 +70,5 @@
  'org-babel-load-languages
  '((R . t)
    (latex . t)))
+
+(display-time)
