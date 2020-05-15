@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: mdb-rm
+# key: mdb-rm
+# --
+
+update table_stats set status = 'FAILED' where workflow_run_uuid in (${1:uuids});
+update table_stage_stats set status = 'FAILED' where workflow_run_uuid in ($1);
+update workflow_run_stats set workflow_status = 'FAILED' where workflow_run_uuid in ($1);

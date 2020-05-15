@@ -9,3 +9,4 @@
 (package! elpy)
 (package! flycheck)
 (package! py-autopep8)
+(package! docker-compose-mode)

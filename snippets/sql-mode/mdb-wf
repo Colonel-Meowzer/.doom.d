@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: mdb-wf
+# key: mdb-wf
+# --
+
+select wrs.workflow_run_uuid, wc.short_name as workflow_name, tc.short_name as table_name, wrs.workflow_status, ts.status as table_status, tss.status as stage_status, tss.stage as stage, ts.load_run_start_ts table_start_time, ts.load_run_end_ts table_end_time, timediff(ts.load_run_start_ts, ts.load_run_end_ts) as duration
+from workflow_run_stats wrs
+left join table_stats ts on ts.workflow_run_uuid = wrs.workflow_run_uuid
+left join table_stage_stats tss on tss.workflow_run_uuid = wrs.workflow_run_uuid
+left join workflow_configs wc on wc.workflow_uuid = wrs.workflow_uuid
+left join table_configs tc on tc.table_uuid = ts.table_uuid
+where wc.short_name in ('${1:workflow_name}') and tc.short_name not in ('') and wrs.as_of_date = '${2:as_of_date}';
