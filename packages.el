@@ -10,3 +10,4 @@
 (package! flycheck)
 (package! py-autopep8)
 (package! docker-compose-mode)
+(package! evil-mc-extras)
