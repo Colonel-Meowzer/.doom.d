@@ -181,7 +181,6 @@
        ;; config. Use it as a reference for your own modules.
        (default +bindings +smartparens))
 
-;; (load-theme 'doom-city-lights t)
 
 (load-file "~/.doom.d/coconut-mode.el")
 

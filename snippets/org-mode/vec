@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: vec
+# uuid:
+# key: vec
+# condition: t
+# --
+\vec{${1:a}}

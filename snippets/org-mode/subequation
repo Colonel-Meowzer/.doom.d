@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: subequation
+# key: subequation
+# --
+\begin{subequations}
+\label{first:${1:label}}
+\begin{align}
+${2:equation}
+\end{align}
+\end{subequations}

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: underset
+# key: underset
+# --
+
+\underset{${1:subtext}}{${2:content}}
