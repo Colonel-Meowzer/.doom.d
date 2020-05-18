@@ -4,28 +4,19 @@
 (load-theme 'doom-moonlight t)
 
 ;; enable shift-select in org mode
-;;(cua-mode 1)
-
 (setq org-support-shift-select t)
 
-;;(eval-after-load "org"
-;;    '(progn
-;;      (eval-after-load "cua-base"
-;;         '(progn
-;;            (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
-;;              (if (and cua-mode
-;;                       org-support-shift-select
-;;                       (not (use-region-p)))
-;;                  (cua-set-mark)))))))
-
-;; Set up python environments
+;; Set up elpy minor mode to be enabled when for python-mode activated.
+;; This needs to be done before elpy-enable
+;;
+;; Most of these configs were taken directly from Elpy documentation.
 (def-package! elpy
   :init
   (advice-add 'python-mode :before 'elpy-enable)
   (add-hook 'after-init-hook 'global-company-mode))
 
 
-;; elpy configs
+;; Enable elpy
 (elpy-enable)
 
 ;; use flycheck not flymake with elpy
@@ -33,7 +24,7 @@
  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
  (add-hook 'elpy-mode-hook 'flycheck-mode))
 
-;; autocode completetion via autopep8
+;; autocode completetion via autopep8 on save. It's pretty sweet.
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
@@ -41,6 +32,7 @@
 (setq python-shell-interpreter "jupyter-console"
       python-shell-interpreter-args "--simple-prompt"
       python-shell-prompt-detect-failure-warning nil
+      ;; fixes control characters ('^G') from clogging up ipython shell when sending code from the buffer.
       elpy-shell-echo-output nil)
 (add-to-list 'python-shell-completion-native-disabled-interpreters
              "jupyter")
@@ -77,6 +69,10 @@
 
 (require 'org)
 (require 'ox-latex)
+;; "minted" is a python library that allows for syntax highlighting when
+;; exporting to pdf. This needs to be installed in the main python environment.
+;;
+;; The following configurations enable this functionality.
 (add-to-list 'org-latex-packages-alist '("" "minted"))
 (setq org-latex-listings 'minted)
 
@@ -85,6 +81,7 @@
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
+;; I forgot what these do.
 (setq org-src-fontify-natively t)
 
 (org-babel-do-load-languages
@@ -92,4 +89,5 @@
  '((R . t)
    (latex . t)))
 
+;; display the time on all buffers by default
 (display-time)
