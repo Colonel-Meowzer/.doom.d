@@ -1,7 +1,7 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
 ;; Place your private configuration here
-(load-theme 'doom-moonlight t)
+(load-theme 'doom-dark+ t)
 
 ;; enable shift-select in org mode
 (setq org-support-shift-select t)
@@ -10,10 +10,14 @@
 ;; This needs to be done before elpy-enable
 ;;
 ;; Most of these configs were taken directly from Elpy documentation.
-(def-package! elpy
+(use-package! elpy
   :init
   (advice-add 'python-mode :before 'elpy-enable)
-  (add-hook 'after-init-hook 'global-company-mode))
+  (add-hook 'after-init-hook 'global-company-mode)
+  ;; enable sphinx-doc minor mode when using elpy
+  ;; to allow for documentation autocomplete shortcuts
+  ;; to be available
+  (add-hook 'after-init-hook 'sphinx-doc-mode))
 
 
 ;; Enable elpy
@@ -36,7 +40,6 @@
       elpy-shell-echo-output nil)
 (add-to-list 'python-shell-completion-native-disabled-interpreters
              "jupyter")
-
 ;; Set Java 8 for using Apache Spark on MacOS
 ;;(setenv "JAVA_HOME"
 ;;        (shell-command-to-string "echo $(/usr/libexec/java_home -v 1.8) | tr -d '\n'"))
@@ -84,10 +87,12 @@
 ;; I forgot what these do.
 (setq org-src-fontify-natively t)
 
+;; enable execution of 'dot' sourceblocks in org-mode so we can generate simple diagrams.
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((R . t)
-   (latex . t)))
+   (latex . t)
+   (dot . t)))
 
 ;; display the time on all buffers by default
-(display-time)
+;;(display-time)

@@ -20,3 +20,6 @@
 
 ;; allows for multiple cursors extra for mass editing
 (package! evil-mc-extras)
+
+;; add reST docstrings for python via sphinx
+(package! sphinx-doc)
