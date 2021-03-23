@@ -23,3 +23,8 @@
 
 ;; add reST docstrings for python via sphinx
 (package! sphinx-doc)
+
+
+;; poly-mode for rmd-mode
+(package! poly-R)
+(package! poly-markdown)
