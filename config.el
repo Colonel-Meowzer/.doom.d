@@ -1,7 +1,7 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
 ;; Place your private configuration here
-(load-theme 'doom-dark+ t)
+(load-theme 'wheatgrass t)
 
 ;; enable shift-select in org mode
 (setq org-support-shift-select t)
@@ -22,6 +22,14 @@
 
 ;; Enable elpy
 (elpy-enable)
+
+;; tell conda how to find itself
+(use-package conda
+  :ensure t
+  :init
+  (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
+  (setq conda-env-home-directory (expand-file-name "~/miniconda3")))
+
 
 ;; use flycheck not flymake with elpy
 (when (require 'flycheck nil t)
