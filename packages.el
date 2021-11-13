@@ -6,18 +6,6 @@
 ;; (package! another-package :recipe (:fetcher github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
 
-;; Python IDE-like experience
-(package! elpy)
-
-;; syntax checker
-(package! flycheck)
-
-;; Conda mode so conda envs can be used
-(package! conda)
-
-;; org-roam
-;;(package! org-roam)
-
 ;; pep8 formatting on save
 (package! py-autopep8)
 

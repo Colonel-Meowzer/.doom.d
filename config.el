@@ -10,64 +10,23 @@
 ;; This needs to be done before elpy-enable
 ;;
 ;; Most of these configs were taken directly from Elpy documentation.
-(use-package! elpy
-  :init
-  (advice-add 'python-mode :before 'elpy-enable)
-  (add-hook 'after-init-hook 'global-company-mode)
-  ;; enable sphinx-doc minor mode when using elpy
-  ;; to allow for documentation autocomplete shortcuts
-  ;; to be available
-  (add-hook 'after-init-hook 'sphinx-doc-mode))
-
-
-;; Enable elpy
-(elpy-enable)
-
-;; tell conda how to find itself
-(use-package conda
-  :ensure t
-  :init
-  (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
-  (setq conda-env-home-directory (expand-file-name "~/miniconda3")))
-
-
-;; use flycheck not flymake with elpy
-(when (require 'flycheck nil t)
- (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
- (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 ;; autocode completetion via autopep8 on save. It's pretty sweet.
 (require 'py-autopep8)
-(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ;; use jupyter as the interactive shell
 (setq python-shell-interpreter "jupyter-console"
       python-shell-interpreter-args "--simple-prompt"
       python-shell-prompt-detect-failure-warning nil
       ;; fixes control characters ('^G') from clogging up ipython shell when sending code from the buffer.
-      elpy-shell-echo-output nil)
+      ;;elpy-shell-echo-output nil
+      )
 (add-to-list 'python-shell-completion-native-disabled-interpreters
              "jupyter")
 ;; Set Java 8 for using Apache Spark on MacOS
 ;;(setenv "JAVA_HOME"
 ;;        (shell-command-to-string "echo $(/usr/libexec/java_home -v 1.8) | tr -d '\n'"))
-
-;; fix buggy autocomplete
-(with-eval-after-load 'python
-  (defun python-shell-completion-native-try ()
-    "Return non-nil if can trigger native completion."
-    (let ((python-shell-completion-native-enable t)
-          (python-shell-completion-native-output-timeout
-           python-shell-completion-native-try-output-timeout))
-      (python-shell-completion-native-get-completions
-       (get-buffer-process (current-buffer))
-       nil "_"))))
-
-(custom-set-variables
- '(flycheck-python-flake8-executable "python3")
- '(flycheck-python-pycompile-executable "python3")
- '(flycheck-python-pylint-executable "python3"))
-
 
 ;; org-confluence export
 ;; (require 'org-confluence)
@@ -106,3 +65,30 @@
 ;;(display-time)
 
 (setq org-roam-directory "~/org")
+(after! python-mode
+  (set-ligatures! 'python-mode
+    ;; Functional
+    :lambda        "lambda"
+    :def           "def"
+    :map           "dict"
+    ;; Types
+    :null          "None"
+    :true          "True"
+    :false         "False"
+    :int           "int"
+    :float         "float"
+    :str           "str"
+    :bool          "bool"
+    :list          "list"
+    ;; Flow
+    :not           "not"
+    :in            "in"
+    :not-in        "not in"
+    :and           "and"
+    :or            "or"
+    :for           "for"
+    :some          "some"
+    :return        "return"
+    :yield         "yield"
+    ;; Other
+    :tuple         "tuple"))
