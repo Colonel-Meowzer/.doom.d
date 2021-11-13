@@ -13,7 +13,8 @@
        ;;japanese
 
        :completion
-       company           ; the ultimate code completion backend
+       (company
+        +childframe)           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ivy               ; a search engine for love and life
@@ -77,7 +78,8 @@
        ;;ansible
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        direnv
-       docker
+       (docker
+        +lsp)
        editorconfig      ; let someone else argue about tabs vs spaces
        ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)   ; run code, run (also, repls)
@@ -228,3 +230,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
 ;; )
+(setq byte-compile-warnings '(cl-functions))

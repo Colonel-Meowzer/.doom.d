@@ -16,14 +16,10 @@
 (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ;; use jupyter as the interactive shell
-(setq python-shell-interpreter "jupyter-console"
-      python-shell-interpreter-args "--simple-prompt"
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "-i --simple-prompt --no-color-info"
       python-shell-prompt-detect-failure-warning nil
-      ;; fixes control characters ('^G') from clogging up ipython shell when sending code from the buffer.
-      ;;elpy-shell-echo-output nil
       )
-(add-to-list 'python-shell-completion-native-disabled-interpreters
-             "jupyter")
 ;; Set Java 8 for using Apache Spark on MacOS
 ;;(setenv "JAVA_HOME"
 ;;        (shell-command-to-string "echo $(/usr/libexec/java_home -v 1.8) | tr -d '\n'"))
