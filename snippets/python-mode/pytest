@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: pytest
+# uuid:
+# key: pytest
+# condition: t
+# --
+
+def test_Given_${1:}_When_${2:}_Then_${3:}($4):
+    ${5:pass}
