@@ -104,3 +104,5 @@
 
 ;; display the time on all buffers by default
 ;;(display-time)
+
+(setq org-roam-directory "~/org")

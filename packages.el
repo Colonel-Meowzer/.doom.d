@@ -16,7 +16,7 @@
 (package! conda)
 
 ;; org-roam
-(package! org-roam)
+;;(package! org-roam)
 
 ;; pep8 formatting on save
 (package! py-autopep8)
