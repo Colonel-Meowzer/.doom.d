@@ -138,6 +138,7 @@
         +present         ; Emacs for presentations
         +roam2            ; org-roam baby!
         +crypt           ;  crypt
+        +pretty          ; prettify org mode. Can be expensive!
         +protocol)       ; Support for org-protocol:// links
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
