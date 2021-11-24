@@ -14,7 +14,7 @@
 
        :completion
        (company
-        +childframe)           ; the ultimate code completion backend
+        +tng)           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ivy               ; a search engine for love and life
@@ -36,7 +36,8 @@
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
        ;;tabbar            ; FIXME an (incomplete) tab bar for Emacs
-       treemacs          ; a project drawer, like neotree but cooler
+       (treemacs
+        +lsp)          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
