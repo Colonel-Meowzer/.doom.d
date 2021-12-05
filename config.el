@@ -88,3 +88,7 @@
     :yield         "yield"
     ;; Other
     :tuple         "tuple"))
+
+;; add to $DOOMDIR/config.el
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
