@@ -1,7 +1,7 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
 ;; Place your private configuration here
-(load-theme 'wheatgrass t)
+(load-theme 'doom-homage-black t)
 
 ;; enable shift-select in org mode
 (setq org-support-shift-select t)
