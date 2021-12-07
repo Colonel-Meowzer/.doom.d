@@ -26,6 +26,7 @@
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
        fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE tags
+       hydra             ; chain commands via hydra.
        indent-guides     ; highlighted indent columns
        (ligatures
         ;;+fira
