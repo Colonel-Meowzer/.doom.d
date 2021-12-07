@@ -52,7 +52,7 @@
        :checkers
        syntax              ; tasing you for every semicolon you forget
        (spell
-        +aspell)             ; tasing you for misspelling mispelling
+        )             ; tasing you for misspelling mispelling
        grammar           ; tasing grammar mistake every you make
        :editor
        (evil +everywhere); come to the dark side, we have cookies
