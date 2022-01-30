@@ -1,7 +1,7 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
 ;; Place your private configuration here
-(load-theme 'doom-homage-black t)
+(load-theme 'doom-badger t)
 
 ;; enable shift-select in org mode
 (setq org-support-shift-select t)
@@ -97,6 +97,12 @@
 ;; different header sizes for different header levels
 (add-hook 'org-mode-hook 'variable-pitch-mode)
 
+;; fix indentation when using variable-pitch-mode
+(add-hook 'after-init-hook
+    (lambda ()
+     (require 'org-indent)       ; for org-indent face
+     (set-face-attribute 'org-indent nil
+         :inherit '(org-hide fixed-pitch))))
 ;; customize fonts for various headers
 ;; (let* ((variable-tuple
 ;;           (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
