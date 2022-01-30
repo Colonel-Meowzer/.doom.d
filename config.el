@@ -6,6 +6,19 @@
 ;; enable shift-select in org mode
 (setq org-support-shift-select t)
 
+;; no line numbers in org-mode
+(defun nolinum ()
+  (display-line-numbers-mode 0)
+)
+(add-hook 'org-mode-hook 'nolinum)
+
+;; numpydoc strings in python-mode
+(use-package numpydoc
+  :ensure t
+  :after python
+  :bind (:map python-mode-map
+              ("C-c C-n" . numpydoc-generate)))
+
 ;; Set up elpy minor mode to be enabled when for python-mode activated.
 ;; This needs to be done before elpy-enable
 ;;
@@ -20,6 +33,7 @@
       python-shell-interpreter-args "-i --simple-prompt --no-color-info"
       python-shell-prompt-detect-failure-warning nil
       )
+
 ;; Set Java 8 for using Apache Spark on MacOS
 ;;(setenv "JAVA_HOME"
 ;;        (shell-command-to-string "echo $(/usr/libexec/java_home -v 1.8) | tr -d '\n'"))

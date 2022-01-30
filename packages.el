@@ -22,3 +22,6 @@
 ;; poly-mode for rmd-mode
 (package! poly-R)
 (package! poly-markdown)
+
+;; docstring template for numpy-style docs
+(package! numpydoc)
