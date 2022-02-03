@@ -3,6 +3,28 @@
 ;; Place your private configuration here
 (load-theme 'doom-badger t)
 
+;; make sure numpydoc is available for python-mode
+(use-package numpydoc
+  :ensure t
+  :after python
+  :bind (:map python-mode-map
+              ("C-c C-n" . numpydoc-generate)))
+
+
+;; Add directories with .pyroot to the python path
+;; this is to allow working in mono-repos for python-pytest
+;; https://github.com/wbolster/emacs-python-pytest
+(add-hook 'python-mode-hook
+          (lambda ()
+            (when-let ((r (locate-dominating-file default-directory ".pyroot")))
+              (setq python-pytest-executable
+                    (concat "PYTHONPATH=" r " " "pytest")))))
+;; Set $DICPATH to "$HOME/Library/Spelling" for hunspell.
+;; (setenv
+;;   "DICPATH"
+;;   (concat (getenv "HOME") "/Library/Spelling")
+;;  )
+
 ;; enable shift-select in org mode
 (setq org-support-shift-select t)
 
@@ -11,13 +33,6 @@
   (display-line-numbers-mode 0)
 )
 (add-hook 'org-mode-hook 'nolinum)
-
-;; numpydoc strings in python-mode
-(use-package numpydoc
-  :ensure t
-  :after python
-  :bind (:map python-mode-map
-              ("C-c C-n" . numpydoc-generate)))
 
 ;; Set up elpy minor mode to be enabled when for python-mode activated.
 ;; This needs to be done before elpy-enable
@@ -118,45 +133,44 @@
      (set-face-attribute 'org-indent nil
          :inherit '(org-hide fixed-pitch))))
 ;; customize fonts for various headers
-;; (let* ((variable-tuple
-;;           (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
-;;                 ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-;;                 ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-;;                 ((x-list-fonts "Verdana")         '(:font "Verdana"))
-;;                 ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-;;                 (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-;;          (base-font-color     (face-foreground 'default nil 'default))
-;;          (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-;;     (custom-theme-set-faces
-;;      'user
-;;      `(org-level-8 ((t (,@headline ,@variable-tuple))))
-;;      `(org-level-7 ((t (,@headline ,@variable-tuple))))
-;;      `(org-level-6 ((t (,@headline ,@variable-tuple))))
-;;      `(org-level-5 ((t (,@headline ,@variable-tuple))))
-;;      `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-;;      `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.15))))
-;;      `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.2))))
-;;      `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.25))))
-;;      `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline t))))))
-
-;; customize fonts for various headers
-(let* (
+(let* ((variable-tuple
+          (cond ((x-list-fonts "Robotic Mono")         '(:font "Robotic Mono"))
+                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
          (base-font-color     (face-foreground 'default nil 'default))
          (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
 
     (custom-theme-set-faces
      'user
-     `(org-level-8 ((t (,@headline ))))
-     `(org-level-7 ((t (,@headline ))))
-     `(org-level-6 ((t (,@headline ))))
-     `(org-level-5 ((t (,@headline ))))
-     `(org-level-4 ((t (,@headline :height 1.1))))
-     `(org-level-3 ((t (,@headline :height 1.15))))
-     `(org-level-2 ((t (,@headline :height 1.2))))
-     `(org-level-1 ((t (,@headline :height 1.25))))
-     `(org-document-title ((t (,@headline :height 1.5 :underline t))))))
+     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.15))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.2))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.25))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline t))))))
 
+;; customize fonts for various headers
+;; (let* (
+;;          (base-font-color     (face-foreground 'default nil 'default))
+;;          (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+;;     (custom-theme-set-faces
+;;      'user
+;;      `(org-level-8 ((t (,@headline ))))
+;;      `(org-level-7 ((t (,@headline ))))
+;;      `(org-level-6 ((t (,@headline ))))
+;;      `(org-level-5 ((t (,@headline ))))
+;;      `(org-level-4 ((t (,@headline :height 1.1))))
+;;      `(org-level-3 ((t (,@headline :height 1.15))))
+;;      `(org-level-2 ((t (,@headline :height 1.2))))
+;;      `(org-level-1 ((t (,@headline :height 1.25))))
+;;      `(org-document-title ((t (,@headline :height 1.5 :underline t))))))
 
 
 

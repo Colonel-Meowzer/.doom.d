@@ -18,6 +18,9 @@
 ;; add reST docstrings for python via sphinx
 (package! sphinx-doc)
 
+(package! org-bullets)
+
+(package! docker-tramp)
 
 ;; poly-mode for rmd-mode
 (package! poly-R)
