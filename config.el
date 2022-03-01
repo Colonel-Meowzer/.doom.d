@@ -60,6 +60,7 @@
 ;; multiple cursors                                                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-c m b") 'mc/edit-beginnings-of-lines)
+(global-set-key (kbd "C-c m e") 'mc/edit-ends-of-lines)
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 
 (require 'org)

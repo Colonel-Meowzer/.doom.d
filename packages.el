@@ -22,6 +22,8 @@
 
 (package! docker-tramp)
 
+(package! multiple-cursors)
+
 ;; poly-mode for rmd-mode
 (package! poly-R)
 (package! poly-markdown)
