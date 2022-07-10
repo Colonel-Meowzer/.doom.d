@@ -34,3 +34,5 @@
 ;; a better syntax highlighter
 (package! tree-sitter)
 (package! tree-sitter-langs)
+
+(package! ejc-sql)

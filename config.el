@@ -202,3 +202,17 @@
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+
+(use-package! ejc-sql)
+
+;; TODO: Add (ejc-create-connection ...)
+(use-package! ejc-company)
+(after! ejc-sql-mode
+ (set-company-backend! 'ejc-company-backend))
+(add-hook 'ejc-sql-minor-mode-hook
+          (lambda ()
+            (company-mode t)))
+(setq ejc-complete-on-dot t)
+
+(global-set-key (kbd "C-c eb") 'ejc-get-temp-editor-buffer)

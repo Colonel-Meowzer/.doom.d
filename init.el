@@ -29,9 +29,9 @@
        hydra             ; chain commands via hydra.
        indent-guides     ; highlighted indent columns
        (ligatures
-        ;;+fira
+        +fira
         +extra
-        +iosevka
+        ;;+iosevka
         )
        modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
@@ -246,4 +246,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
 ;; )
-(setq byte-compile-warnings '(cl-functions))
+;; (setq byte-compile-warnings '(cl-functions))
