@@ -216,3 +216,7 @@
 (setq ejc-complete-on-dot t)
 
 (global-set-key (kbd "C-c eb") 'ejc-get-temp-editor-buffer)
+
+(def-package! dbt-mode
+  ;; Customize `sql-product' to set the flavor of the SQL syntax.
+  (sql-product 'postgres))
