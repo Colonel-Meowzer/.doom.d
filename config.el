@@ -8,7 +8,7 @@
   :ensure t
   :after python
   :bind (:map python-mode-map
-              ("C-c C-n" . numpydoc-generate)))
+         ("C-c C-n" . numpydoc-generate)))
 
 
 ;; Add directories with .pyroot to the python path
@@ -31,7 +31,7 @@
 ;; no line numbers in org-mode
 (defun nolinum ()
   (display-line-numbers-mode 0)
-)
+  )
 (add-hook 'org-mode-hook 'nolinum)
 
 ;; Set up elpy minor mode to be enabled when for python-mode activated.
@@ -129,32 +129,32 @@
 
 ;; fix indentation when using variable-pitch-mode
 (add-hook 'after-init-hook
-    (lambda ()
-     (require 'org-indent)       ; for org-indent face
-     (set-face-attribute 'org-indent nil
-         :inherit '(org-hide fixed-pitch))))
+          (lambda ()
+            (require 'org-indent)       ; for org-indent face
+            (set-face-attribute 'org-indent nil
+                                :inherit '(org-hide fixed-pitch))))
 ;; customize fonts for various headers
 (let* ((variable-tuple
-          (cond ((x-list-fonts "Robotic Mono")         '(:font "Robotic Mono"))
-                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-                ((x-list-fonts "Verdana")         '(:font "Verdana"))
-                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-         (base-font-color     (face-foreground 'default nil 'default))
-         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+        (cond ;; ((x-list-fonts "Robotic Mono")         '(:font "Robotic Mono"))
+         ;; ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+         ;; ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+         ;; ((x-list-fonts "Verdana")         '(:font "Verdana"))
+         ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+         (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
 
-    (custom-theme-set-faces
-     'user
-     `(org-level-8 ((t (,@headline ,@variable-tuple))))
-     `(org-level-7 ((t (,@headline ,@variable-tuple))))
-     `(org-level-6 ((t (,@headline ,@variable-tuple))))
-     `(org-level-5 ((t (,@headline ,@variable-tuple))))
-     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.15))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.2))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.25))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline t))))))
+  (custom-theme-set-faces
+   'user
+   `(org-level-8 ((t (,@headline ,@variable-tuple))))
+   `(org-level-7 ((t (,@headline ,@variable-tuple))))
+   `(org-level-6 ((t (,@headline ,@variable-tuple))))
+   `(org-level-5 ((t (,@headline ,@variable-tuple))))
+   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.15))))
+   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.2))))
+   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.25))))
+   `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline t))))))
 
 ;; customize fonts for various headers
 ;; (let* (
@@ -175,10 +175,10 @@
 
 
 
-(custom-theme-set-faces
-   'user
-   '(variable-pitch ((t (:family "Roboto Mono" :height 140 :weight thin))))
-   '(fixed-pitch ((t ( :family "Roboto Mono" :height 120)))))
+;;(custom-theme-set-faces
+;;   'user
+;;   '(variable-pitch ((t (:family "Roboto Mono" :height 140 :weight thin))))
+;;   '(fixed-pitch ((t ( :family "Roboto Mono" :height 120)))))
 
 ;; set monospace fonts for certain things
 (custom-theme-set-faces
@@ -218,18 +218,16 @@
 (global-set-key (kbd "C-c eb") 'ejc-get-temp-editor-buffer)
 
 (use-package! dbt-mode
-  :config
-  ;; Customize `sql-product' to set the flavor of the SQL syntax.
-  ;; (setq sql-product 'postgres)
-  (map! :leader
-        (:prefix-map ("m" . "dbt")
-         :desc "DBT Debug" "d" #'dbt-debug
-         :desc "DBT Run All" "r a" #'dbt-run
-         :desc "DBT Run Buffer" "r r" #'dbt-run-buffer
-         :desc "DBT Build All" "b a" #'dbt-build
-         :desc "DBT Build Buffer" "b b" #'dbt-build-buffer
-         :desc "DBT Compile" "c c" #'dbt-compile
-         :desc "DBT Compile & Open" "c o" #'dbt-open-compiled
-         :desc "DBT Clean" "x" #'dbt-clean
-         :desc "DBT Test All" "t" #'dbt-test))
-  )
+  :init
+  (map! :after dbt-mode
+        :localleader
+        :map dbt-mode-map
+        :desc "DBT Debug" "d" #'dbt-debug
+        :desc "DBT Run All" "r a" #'dbt-run
+        :desc "DBT Run Buffer" "r r" #'dbt-run-buffer
+        :desc "DBT Build All" "b a" #'dbt-build
+        :desc "DBT Build Buffer" "b b" #'dbt-build-buffer
+        :desc "DBT Compile" "c c" #'dbt-compile
+        :desc "DBT Compile & Open" "c o" #'dbt-open-compiled
+        :desc "DBT Clean" "x" #'dbt-clean
+        :desc "DBT Test All" "t" #'dbt-test))
