@@ -30,6 +30,7 @@
 
 ;; docstring template for numpy-style docs
 (package! numpydoc)
+(package! zen-mode)
 
 ;; a better syntax highlighter
 (package! tree-sitter)
@@ -37,7 +38,7 @@
 
 (package! ejc-sql)
 
-
+(package! polymode)
 (package! jinja2-mode)
 (package! dbt-mode :recipe
   (:host github :repo "Colonel-Meowzer/dbt-mode"))

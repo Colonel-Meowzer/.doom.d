@@ -1,7 +1,7 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
 ;; Place your private configuration here
-(load-theme 'doom-badger t)
+(load-theme 'doom-zenburn t)
 
 ;; make sure numpydoc is available for python-mode
 (use-package numpydoc
@@ -217,6 +217,19 @@
 
 (global-set-key (kbd "C-c eb") 'ejc-get-temp-editor-buffer)
 
-(def-package! dbt-mode
+(use-package! dbt-mode
+  :config
   ;; Customize `sql-product' to set the flavor of the SQL syntax.
-  (sql-product 'postgres))
+  ;; (setq sql-product 'postgres)
+  (map! :leader
+        (:prefix-map ("m" . "dbt")
+         :desc "DBT Debug" "d" #'dbt-debug
+         :desc "DBT Run All" "r a" #'dbt-run
+         :desc "DBT Run Buffer" "r r" #'dbt-run-buffer
+         :desc "DBT Build All" "b a" #'dbt-build
+         :desc "DBT Build Buffer" "b b" #'dbt-build-buffer
+         :desc "DBT Compile" "c c" #'dbt-compile
+         :desc "DBT Compile & Open" "c o" #'dbt-open-compiled
+         :desc "DBT Clean" "x" #'dbt-clean
+         :desc "DBT Test All" "t" #'dbt-test))
+  )
