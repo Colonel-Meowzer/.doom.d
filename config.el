@@ -209,7 +209,7 @@
 ;; TODO: Add (ejc-create-connection ...)
 (use-package! ejc-company)
 (after! ejc-sql-mode
- (set-company-backend! 'ejc-company-backend))
+  (set-company-backend! 'ejc-company-backend))
 (add-hook 'ejc-sql-minor-mode-hook
           (lambda ()
             (company-mode t)))
@@ -217,13 +217,22 @@
 
 (global-set-key (kbd "C-c eb") 'ejc-get-temp-editor-buffer)
 
-(defun sqlfluff-formatted-str ()
-  (interactive)
-  (let ((choices '("ansi" "athena" "bigquery" "clickhouse" "databricks" "db2" "exasol" "hive" "mysql" "oracle" "postgres" "redshift" "snowflake" "soql" "sparksql" "sqlite" "teradata" "tsql")))
-    (message (format "sqlfluff fix --dialect %s -" (completing-read "sql-dialect:" choices ))))
-  )
 ;; TODO: Figure out how to incorporate the interactive version above
 (set-formatter! 'sqlfluff (format "sqlfluff fix --dialect %s -" "ansi") :modes '(sql-mode dbt-mode))
+
+(defun sql-format ()
+  "Custom formatter for sql using sqlfluff"
+  (interactive)
+  (let (
+        (choices '("ansi" "athena" "bigquery" "clickhouse" "databricks" "db2" "exasol" "hive" "mysql" "oracle" "postgres" "redshift" "snowflake" "soql" "sparksql" "sqlite" "teradata" "tsql"))
+        )
+    ;; (message (format "sqlfluff fix --dialect %s %s" (completing-read "sql-dialect:" choices) (buffer-file-name)))
+    (async-shell-command
+     (format "sqlfluff fix -f --dialect %s %s" (completing-read "sql-dialect:" choices) (buffer-file-name))
+     )
+    )
+  )
+
 
 (use-package! dbt-mode
   :init
