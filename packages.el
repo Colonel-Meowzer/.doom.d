@@ -42,3 +42,6 @@
 (package! jinja2-mode)
 (package! dbt-mode :recipe
   (:host github :repo "Colonel-Meowzer/dbt-mode"))
+
+
+(package! org-download)

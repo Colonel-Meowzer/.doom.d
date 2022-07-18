@@ -40,12 +40,12 @@
 ;; Most of these configs were taken directly from Elpy documentation.
 
 ;; autocode completetion via autopep8 on save. It's pretty sweet.
-(require 'py-autopep8)
-(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+;;(require 'py-autopep8)
+;;(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ;; use jupyter as the interactive shell
 (setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "-i --simple-prompt --no-color-info"
+      python-shell-interpreter-args "-i --simple-prompt --no-color-info --pylab=osx"
       python-shell-prompt-detect-failure-warning nil
       )
 
@@ -203,7 +203,6 @@
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
-
 (use-package! ejc-sql)
 
 ;; TODO: Add (ejc-create-connection ...)
@@ -256,3 +255,44 @@
         :desc "DBT Test All" "t" #'dbt-test
         :desc "format" "f" #'sql-format
         ))
+
+(setq +format-on-save-enabled-modes
+      '(not python-mode         ; black has differing versions and is not uniform across repos.
+        ))
+
+;; org-download
+(require 'org-download)
+
+;; Drag-and-drop to `dired`
+(add-hook 'dired-mode-hook 'org-download-enable)
+
+
+(defun magit-add-current-buffer-to-kill-ring ()
+  "Show the current branch in the echo-area and add it to the `kill-ring'."
+  (interactive)
+  (let ((branch (magit-get-current-branch)))
+    (if branch
+        (progn (kill-new branch)
+               (message "%s" branch))
+      (user-error "There is not current branch"))))
+
+(global-set-key (kbd "C-c g y") 'magit-add-current-buffer-to-kill-ring)
+
+(defun civis-sql (sql)
+  (interactive)
+  (let ((buffer (generate-new-buffer "*query-result*")))
+    (with-current-buffer buffer (csv-mode))
+    (with-current-buffer buffer (toggle-truncate-lines))
+    (call-process-shell-command (format "source %s && civis sql -d redshift-dr -c '%s' -n 5" (getenv "CREDENTIAL_FILE") sql) nil buffer 0)
+    (switch-to-buffer buffer)))
+
+
+(defun civis-sql-send-buffer (start end)
+  (interactive)
+  (let ((buffer (generate-new-buffer "*query-result*")))
+    (with-current-buffer buffer (csv-mode))
+    (with-current-buffer buffer (toggle-truncate-lines))
+    (call-process-shell-command (format "source %s && civis sql -d redshift-dr -c '%s' -n 5" (getenv "CREDENTIAL_FILE") (buffer-substring-no-properties start end)) nil buffer 0)
+    (switch-to-buffer buffer)))
+
+(global-set-key (kbd "C-c c s") 'civis-sql-send-buffer)
