@@ -218,7 +218,6 @@
 (global-set-key (kbd "C-c eb") 'ejc-get-temp-editor-buffer)
 
 ;; TODO: Figure out how to incorporate the interactive version above
-(set-formatter! 'sqlfluff (format "sqlfluff fix --dialect %s -" "ansi") :modes '(sql-mode dbt-mode))
 
 (defun sql-format ()
   "Custom formatter for sql using sqlfluff"
@@ -233,7 +232,12 @@
     )
   )
 
+;; (set-formatter! 'sqlfluff 'sql-format :modes '(sql-mode dbt-mode))
 
+(map! :after sql-mode
+      :localleader
+      :map sql-mode-map
+      :desc "format" "f" #'sql-format)
 (use-package! dbt-mode
   :init
   (map! :after dbt-mode
@@ -247,4 +251,6 @@
         :desc "DBT Compile" "c c" #'dbt-compile
         :desc "DBT Compile & Open" "c o" #'dbt-open-compiled
         :desc "DBT Clean" "x" #'dbt-clean
-        :desc "DBT Test All" "t" #'dbt-test))
+        :desc "DBT Test All" "t" #'dbt-test
+        :desc "format" "f" #'sql-format
+        ))
