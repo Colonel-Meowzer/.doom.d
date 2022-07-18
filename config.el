@@ -232,6 +232,8 @@
     )
   )
 
+;; TODO: figure out how to incorporate the above function
+;;       into the default formatter.
 ;; (set-formatter! 'sqlfluff 'sql-format :modes '(sql-mode dbt-mode))
 
 (map! :after sql-mode
