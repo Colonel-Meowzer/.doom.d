@@ -77,7 +77,7 @@
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
-
+(setq auth-sources '("~/.authinfo"))
 ;; enable execution of 'dot' sourceblocks in org-mode so we can generate simple diagrams.
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -102,6 +102,7 @@
     :str           "str"
     :bool          "bool"
     :list          "list"
+    :map           "map"
     ;; Flow
     :not           "not"
     :in            "in"
@@ -113,7 +114,7 @@
     :return        "return"
     :yield         "yield"
     ;; Other
-    :tuple         "tuple"))
+    :tuple         "Tuple"))
 
 ;; add to $DOOMDIR/config.el
 (after! dap-mode
@@ -218,7 +219,7 @@
 
 ;; TODO: Figure out how to incorporate the interactive version above
 
-(defun sql-format ()
+(defun sql-format-fix ()
   "Custom formatter for sql using sqlfluff"
   (interactive)
   (let (
@@ -226,35 +227,37 @@
         )
     ;; (message (format "sqlfluff fix --dialect %s %s" (completing-read "sql-dialect:" choices) (buffer-file-name)))
     (async-shell-command
-     (format "sqlfluff fix -f --dialect %s %s" (completing-read "sql-dialect:" choices) (buffer-file-name))
+     (format "sqlfluff fix -f --dialect %s %s" (completing-read "sql-dialect: " choices) (buffer-file-name))
      )
     )
   )
 
-;; TODO: figure out how to incorporate the above function
-;;       into the default formatter.
-;; (set-formatter! 'sqlfluff 'sql-format :modes '(sql-mode dbt-mode))
+(defun sql-format-lint ()
+  "Custom formatter for sql using sqlfluff"
+  (interactive)
+  (let (
+        (choices '("ansi" "athena" "bigquery" "clickhouse" "databricks" "db2" "exasol" "hive" "mysql" "oracle" "postgres" "redshift" "snowflake" "soql" "sparksql" "sqlite" "teradata" "tsql"))
+        )
+    ;; (message (format "sqlfluff fix --dialect %s %s" (completing-read "sql-dialect:" choices) (buffer-file-name)))
+    (async-shell-command
+     (format "sqlfluff lint --dialect %s %s" (completing-read "sql-dialect: " choices) (buffer-file-name))
+     )
+    )
+  )
 
-(map! :after sql-mode
-      :localleader
-      :map sql-mode-map
-      :desc "format" "f" #'sql-format)
-(use-package! dbt-mode
-  :init
-  (map! :after dbt-mode
-        :localleader
-        :map dbt-mode-map
-        :desc "DBT Debug" "d" #'dbt-debug
-        :desc "DBT Run All" "r a" #'dbt-run
-        :desc "DBT Run Buffer" "r r" #'dbt-run-buffer
-        :desc "DBT Build All" "b a" #'dbt-build
-        :desc "DBT Build Buffer" "b b" #'dbt-build-buffer
-        :desc "DBT Compile" "c c" #'dbt-compile
-        :desc "DBT Compile & Open" "c o" #'dbt-open-compiled
-        :desc "DBT Clean" "x" #'dbt-clean
-        :desc "DBT Test All" "t" #'dbt-test
-        :desc "format" "f" #'sql-format
-        ))
+(define-key sql-mode-map (kbd "C-c ff") 'sql-format-fix)
+(define-key sql-mode-map (kbd "C-c fl") 'sql-format-lint)
+;; dbt key bindings
+(define-key sql-mode-map (kbd "C-c dd") 'dbt-debug)
+(define-key sql-mode-map (kbd "C-c dra") 'dbt-run)
+(define-key sql-mode-map (kbd "C-c drr") 'dbt-run-buffer)
+(define-key sql-mode-map (kbd "C-c dba") 'dbt-build)
+(define-key sql-mode-map (kbd "C-c dbb") 'dbt-build-buffer)
+
+(define-key sql-mode-map (kbd "C-c dcc") 'dbt-compile)
+(define-key sql-mode-map (kbd "C-c dco") 'dbt-open-compiled)
+(define-key sql-mode-map (kbd "C-c dx") 'dbt-clean)
+(define-key sql-mode-map (kbd "C-c dt") 'dbt-test)
 
 (setq +format-on-save-enabled-modes
       '(not python-mode         ; black has differing versions and is not uniform across repos.
@@ -296,3 +299,24 @@
     (switch-to-buffer buffer)))
 
 (global-set-key (kbd "C-c c s") 'civis-sql-send-buffer)
+
+
+;; https://github.com/org-roam/org-roam-ui/README.md
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    ;;:after org
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+
+(use-package! org-roam-bibtex
+  :after org-roam
+  :config
+  (require 'org-ref)) ; optional: if using Org-ref v2 or v3 citation links

@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: redshift-cancel
+# uuid:
+# key: trigger-key
+# condition: t
+# --
+
+SELECT pid, trim(user_name), starttime, substring(query,1,20)
+FROM stv_recents
+WHERE status='Running';

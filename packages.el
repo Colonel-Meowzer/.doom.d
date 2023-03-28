@@ -40,8 +40,22 @@
 
 (package! polymode)
 (package! jinja2-mode)
-(package! dbt-mode :recipe
-  (:host github :repo "Colonel-Meowzer/dbt-mode"))
+ (package! dbt-mode :recipe
+   (:host github :repo "Colonel-Meowzer/dbt-mode"))
 
 
 (package! org-download)
+(package! org-ref)
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+
+;; When using bibtex-completion via the `biblio` module
+(unpin! bibtex-completion helm-bibtex ivy-bibtex)
+
+;; https://github.com/org-roam/org-roam-ui/README.md
+(unpin! org-roam)
+(package! org-roam-ui)
+
+(package! logview)
+
+(package! ox-pandoc)

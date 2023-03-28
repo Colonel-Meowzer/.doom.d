@@ -24,14 +24,12 @@
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       fill-column       ; a `fill-column' indicator
+       ;; fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE tags
        hydra             ; chain commands via hydra.
        indent-guides     ; highlighted indent columns
        (ligatures
-        +fira
         +extra
-        ;;+iosevka
         )
        modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
@@ -41,6 +39,7 @@
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
        ;;tabbar            ; FIXME an (incomplete) tab bar for Emacs
+       ;; (tabs)
        (treemacs
         +lsp)          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
@@ -48,19 +47,21 @@
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
+       (zen)
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
        (spell
         )             ; tasing you for misspelling mispelling
        grammar           ; tasing grammar mistake every you make
+
        :editor
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
        (format +onsave)  ; automated prettiness
        word-wrap
-       ibuffer           ; interactive buffer management
+       ;;ibuffer           ; interactive buffer management
        ;;lispy             ; vim for lisp, for people who dont like vim
        multiple-cursors  ; editing in many places at once
        ;;objed             ; text object editing for the innocent
@@ -84,6 +85,7 @@
 
        :tools
        ;;ansible
+       (biblio)
        (debugger
         +lsp); FIXME stepping through code, to help you add bugs
        direnv
@@ -96,7 +98,8 @@
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
        lsp
-       magit             ; a git porcelain for Emacs
+       (magit
+        +forge)             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        pdf               ; pdf enhancements
@@ -164,7 +167,8 @@
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        rest              ; Emacs as a REST client
-       ;;ruby              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       (ruby
+        +lsp)              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        scala             ; java, but good
        (sh
