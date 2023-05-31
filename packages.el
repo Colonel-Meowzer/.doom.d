@@ -63,4 +63,9 @@
 (package! copilot
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
 
-(package! chatgpt)
+
+(package! openai
+  :recipe (:host github :repo "emacs-openai/openai" :files ("*.el")))
+
+(package! chatgpt
+  :recipe (:host github :repo "emacs-openai/chatgpt" :files ("*.el")))
