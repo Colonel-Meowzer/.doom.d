@@ -3,6 +3,10 @@
 ;; Place your private configuration here
 (load-theme 'doom-zenburn t)
 
+;; (set-frame-font "Fira Code" nil t)
+(set-frame-font "FiraCode Nerd Font" nil t)
+;; (set-frame-font "DejaVu Sans ExtraLight" nil t)
+
 ;; make sure numpydoc is available for python-mode
 (use-package numpydoc
   :ensure t
@@ -87,34 +91,60 @@
 
 
 (setq org-roam-directory "~/org")
-(after! python-mode
-  (set-ligatures! 'python-mode
-    ;; Functional
-    :lambda        "lambda"
-    :def           "def"
-    :map           "dict"
-    ;; Types
-    :null          "None"
-    :true          "True"
-    :false         "False"
-    :int           "int"
-    :float         "float"
-    :str           "str"
-    :bool          "bool"
-    :list          "list"
-    :map           "map"
-    ;; Flow
-    :not           "not"
-    :in            "in"
-    :not-in        "not in"
-    :and           "and"
-    :or            "or"
-    :for           "for"
-    :some          "some"
-    :return        "return"
-    :yield         "yield"
-    ;; Other
-    :tuple         "Tuple"))
+(global-prettify-symbols-mode t)
+;; (set-fontset-font "fontset-default" '(#x1d4d5 . #x1d4e3) "Symbola")
+(add-hook
+ 'python-mode-hook
+ (lambda ()
+   (mapc (lambda (pair) (push pair prettify-symbols-alist))
+         '(;; Syntax
+           ("def" .      #x2131)
+           ("not" .      #x2757)
+           ("in" .       #x2208)
+           ("not in" .   #x2209)
+           ("return" .   #x27fc)
+           ("yield" .    #x27fb)
+           ("for" .      #x2200)
+           ;; Base Types
+           ("int" .      #x2124)
+           ("float" .    #x211d)
+           ("str" .      #x1d54A)
+           ("True" .     #x1d4e3)
+           ("False" .    #x1d4d5)
+           ;; Mypy
+           ("Tuple" .    #x2a02)
+           ("Set" .      #x2126)
+           ("Any" .      #x2754)
+           ("Union" .    #x22c3)))))
+
+;; (after! python-mode
+;;   (set-ligatures! 'python-mode
+;;     ;; Functional
+;;     :lambda        "lambda"
+;;     :def           "def"
+;;     :map           "dict"
+;;     ;; Types
+;;     :null          "None"
+;;     :true          "True"
+;;     :false         "False"
+;;     :int           "int"
+;;     :float         "float"
+;;     :str           "str"
+;;     :bool          "bool"
+;;     :list          "list"
+;;     :map           "map"
+;;     ;; Flow
+;;     :not           "not"
+;;     :in            "in"
+;;     :not-in        "not in"
+;;     :and           "and"
+;;     :or            "or"
+;;     :for           "for"
+;;     :some          "some"
+;;     :return        "return"
+;;     :yield         "yield"
+;;     ;; Other
+;;     :tuple         "Tuple"))
 
 ;; add to $DOOMDIR/config.el
 (after! dap-mode
@@ -321,6 +351,10 @@
   :config
   (require 'org-ref)) ; optional: if using Org-ref v2 or v3 citation links
 
+(setq company-frontends '(company-tng-frontend company-box-frontend))
+
+;; This opens up all files on startup by default. Make sure to archive the directory every now and then
+(setq org-agenda-files '("~/org/daily/"))
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
@@ -329,4 +363,13 @@
               ("TAB" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
-(setq company-frontends '(company-tng-frontend company-box-frontend))
+
+(use-package dbt-mode
+  ;; Customize `sql-product' to set the flavor of the SQL syntax.
+  :custom (sql-product 'postgres))
+
+(use-package! nvm
+  :config
+  ;; Optionally set a default node version
+  (nvm-use "21"))
+

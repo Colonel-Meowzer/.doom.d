@@ -8,6 +8,8 @@
 ;; More information about these modules (and what flags they support) can be
 ;; found in modules/README.org.
 
+(setenv "LSP_USE_PLISTS" "1")
+
 (doom! :input
        ;;chinese
        ;;japanese
@@ -81,8 +83,8 @@
 
        :term
        ;;eshell            ; a consistent, cross-platform shell (WIP)
-       ;;term              ; terminals in Emacs
-       vterm             ; another terminals in Emacs
+       term              ; terminals in Emacs
+       ;; vterm             ; another terminals in Emacs
 
        :tools
        ;;ansible
@@ -97,8 +99,8 @@
        (eval +overlay)   ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
-        +docsets)        ; ...or in Dash docsets locally
-       lsp
+        +docsets        ; ...or in Dash docsets locally
+        +lsp)
        (magit
         +forge)             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
@@ -128,7 +130,7 @@
        ess               ; emacs speaks statistics
        ;;fsharp           ; ML stands for Microsoft's Language
        ;;go                ; the hipster dialect
-       (haskell +intero) ; a language that's lazier than I am
+       ;;(haskell +intero) ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
@@ -252,3 +254,33 @@
  ;; If there is more than one, they won't work right.
 ;; )
 ;; (setq byte-compile-warnings '(cl-functions))
+;;; in $DOOMDIR/init.el
+
+(defun lsp-booster--advice-json-parse (old-fn &rest args)
+  "Try to parse bytecode instead of json."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+(advice-add (if (progn (require 'json)
+                       (fboundp 'json-parse-buffer))
+                'json-parse-buffer
+              'json-read)
+            :around
+            #'lsp-booster--advice-json-parse)
+
+(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster command to lsp CMD."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)                             ;; for check lsp-server-present?
+             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection))  ;; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)

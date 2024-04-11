@@ -60,12 +60,16 @@
 
 (package! ox-pandoc)
 
+(package! chatgpt-shell)
+
 (package! copilot
-  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el" "dist")))
+(package! dbt-mode
+  :recipe (:host github :repo "CyberShadow/dbt-mode"))
+(package! code-cells
+  :recipe (:host github :repo "astoff/code-cells.el"))
+(package! jupyter)
 
+(package! nvm)
 
-(package! openai
-  :recipe (:host github :repo "emacs-openai/openai" :files ("*.el")))
-
-(package! chatgpt
-  :recipe (:host github :repo "emacs-openai/chatgpt" :files ("*.el")))
+(package! direnv)
