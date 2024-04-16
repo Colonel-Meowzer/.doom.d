@@ -20,7 +20,8 @@
         +childframe)           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       ;;ivy               ; a search engine for love and life
+       vertico
 
        :ui
        deft              ; notational velocity for Emacs
@@ -46,11 +47,11 @@
        (treemacs
         +lsp)          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
-       vc-gutter         ; vcs diff in the fringe
+       (vc-gutter +pretty)         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
-       (zen)
+       ;; (zen)
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
@@ -82,8 +83,8 @@
        undo              ; evil undo
 
        :term
-       ;;eshell            ; a consistent, cross-platform shell (WIP)
-       term              ; terminals in Emacs
+       eshell            ; a consistent, cross-platform shell (WIP)
+       ;;term              ; terminals in Emacs
        ;; vterm             ; another terminals in Emacs
 
        :tools
@@ -91,7 +92,7 @@
        (biblio)
        (debugger
         +lsp); FIXME stepping through code, to help you add bugs
-       direnv
+       ;;direnv
        (docker
         +lsp)
        editorconfig      ; let someone else argue about tabs vs spaces
@@ -101,8 +102,7 @@
        (lookup           ; helps you navigate your code and documentation
         +docsets        ; ...or in Dash docsets locally
         +lsp)
-       (magit
-        +forge)             ; a git porcelain for Emacs
+       magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        pdf               ; pdf enhancements
@@ -206,7 +206,8 @@
        ;;impatient-mode    ; show off code over HTTP
 
        :os
-       macos
+       (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
+
 
        :config
        ;; For literate config users. This will tangle+compile a config.org

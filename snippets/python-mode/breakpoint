@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: breakpoint
+# uuid:
+# key: br
+# condition: t
+# --
+
+breakpoint()

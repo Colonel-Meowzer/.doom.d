@@ -9,10 +9,9 @@
 
 ;; make sure numpydoc is available for python-mode
 (use-package numpydoc
-  :ensure t
   :after python
   :bind (:map python-mode-map
-         ("C-c C-n" . numpydoc-generate)))
+              ("C-c C-n" . numpydoc-generate)))
 
 
 ;; Add directories with .pyroot to the python path
@@ -23,11 +22,6 @@
             (when-let ((r (locate-dominating-file default-directory ".pyroot")))
               (setq python-pytest-executable
                     (concat "PYTHONPATH=" r " " "pytest")))))
-;; Set $DICPATH to "$HOME/Library/Spelling" for hunspell.
-;; (setenv
-;;   "DICPATH"
-;;   (concat (getenv "HOME") "/Library/Spelling")
-;;  )
 
 ;; enable shift-select in org mode
 (setq org-support-shift-select t)
@@ -42,10 +36,6 @@
 ;; This needs to be done before elpy-enable
 ;;
 ;; Most of these configs were taken directly from Elpy documentation.
-
-;; autocode completetion via autopep8 on save. It's pretty sweet.
-;;(require 'py-autopep8)
-;;(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ;; use jupyter as the interactive shell
 (setq python-shell-interpreter "ipython"
@@ -146,9 +136,6 @@
 ;;     ;; Other
 ;;     :tuple         "Tuple"))
 
-;; add to $DOOMDIR/config.el
-(after! dap-mode
-  (setq dap-python-debugger 'debugpy))
 
 ;; ORG HEADINGS (https://zzamboni.org/post/beautifying-org-mode-in-emacs/)
 
@@ -187,30 +174,6 @@
    `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.25))))
    `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline t))))))
 
-;; customize fonts for various headers
-;; (let* (
-;;          (base-font-color     (face-foreground 'default nil 'default))
-;;          (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-;;     (custom-theme-set-faces
-;;      'user
-;;      `(org-level-8 ((t (,@headline ))))
-;;      `(org-level-7 ((t (,@headline ))))
-;;      `(org-level-6 ((t (,@headline ))))
-;;      `(org-level-5 ((t (,@headline ))))
-;;      `(org-level-4 ((t (,@headline :height 1.1))))
-;;      `(org-level-3 ((t (,@headline :height 1.15))))
-;;      `(org-level-2 ((t (,@headline :height 1.2))))
-;;      `(org-level-1 ((t (,@headline :height 1.25))))
-;;      `(org-document-title ((t (,@headline :height 1.5 :underline t))))))
-
-
-
-;;(custom-theme-set-faces
-;;   'user
-;;   '(variable-pitch ((t (:family "Roboto Mono" :height 140 :weight thin))))
-;;   '(fixed-pitch ((t ( :family "Roboto Mono" :height 120)))))
-
 ;; set monospace fonts for certain things
 (custom-theme-set-faces
  'user
@@ -228,26 +191,13 @@
  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 
 ;; enable tree-sitter
-(use-package! tree-sitter
-  :config
-  (require 'tree-sitter-langs)
-  (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+;; (use-package! tree-sitter
+;;   :config
+;;   (require 'tree-sitter-langs)
+;;   (global-tree-sitter-mode)
+;;   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
-(use-package! ejc-sql)
-
-;; TODO: Add (ejc-create-connection ...)
-(use-package! ejc-company)
-(after! ejc-sql-mode
-  (set-company-backend! 'ejc-company-backend))
-(add-hook 'ejc-sql-minor-mode-hook
-          (lambda ()
-            (company-mode t)))
-(setq ejc-complete-on-dot t)
-
-(global-set-key (kbd "C-c eb") 'ejc-get-temp-editor-buffer)
-
-;; TODO: Figure out how to incorporate the interactive version above
+TODO: Figure out how to incorporate the interactive version above
 
 (defun sql-format-fix ()
   "Custom formatter for sql using sqlfluff"
@@ -275,22 +225,10 @@
     )
   )
 
-(define-key sql-mode-map (kbd "C-c ff") 'sql-format-fix)
-(define-key sql-mode-map (kbd "C-c fl") 'sql-format-lint)
-;; dbt key bindings
-(define-key sql-mode-map (kbd "C-c dd") 'dbt-debug)
-(define-key sql-mode-map (kbd "C-c dra") 'dbt-run)
-(define-key sql-mode-map (kbd "C-c drr") 'dbt-run-buffer)
-(define-key sql-mode-map (kbd "C-c dba") 'dbt-build)
-(define-key sql-mode-map (kbd "C-c dbb") 'dbt-build-buffer)
-
-(define-key sql-mode-map (kbd "C-c dcc") 'dbt-compile)
-(define-key sql-mode-map (kbd "C-c dco") 'dbt-open-compiled)
-(define-key sql-mode-map (kbd "C-c dx") 'dbt-clean)
-(define-key sql-mode-map (kbd "C-c dt") 'dbt-test)
 
 (setq +format-on-save-enabled-modes
       '(not python-mode         ; black has differing versions and is not uniform across repos.
+        not sql-mode            ; sql-formatting has a ways to go
         ))
 
 ;; org-download
@@ -311,40 +249,20 @@
 
 (global-set-key (kbd "C-c g y") 'magit-add-current-buffer-to-kill-ring)
 
-(defun civis-sql (sql)
-  (interactive)
-  (let ((buffer (generate-new-buffer "*query-result*")))
-    (with-current-buffer buffer (csv-mode))
-    (with-current-buffer buffer (toggle-truncate-lines))
-    (call-process-shell-command (format "source %s && civis sql -d redshift-dr -c '%s' -n 5" (getenv "CREDENTIAL_FILE") sql) nil buffer 0)
-    (switch-to-buffer buffer)))
-
-
-(defun civis-sql-send-buffer (start end)
-  (interactive)
-  (let ((buffer (generate-new-buffer "*query-result*")))
-    (with-current-buffer buffer (csv-mode))
-    (with-current-buffer buffer (toggle-truncate-lines))
-    (call-process-shell-command (format "source %s && civis sql -d redshift-dr -c '%s' -n 5" (getenv "CREDENTIAL_FILE") (buffer-substring-no-properties start end)) nil buffer 0)
-    (switch-to-buffer buffer)))
-
-(global-set-key (kbd "C-c c s") 'civis-sql-send-buffer)
-
-
 ;; https://github.com/org-roam/org-roam-ui/README.md
 (use-package! websocket
-    :after org-roam)
+  :after org-roam)
 
 (use-package! org-roam-ui
-    ;;:after org
-    :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
+  ;;:after org
+  :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
 (use-package! org-roam-bibtex
   :after org-roam
@@ -362,14 +280,49 @@
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
-
-(use-package dbt-mode
-  ;; Customize `sql-product' to set the flavor of the SQL syntax.
-  :custom (sql-product 'postgres))
+              ("C-<tab>" . 'copilot-accept-completion-by-word))
+  :config (add-to-list `copilot-indentation-alist `(sql-mode 4)))
 
 (use-package! nvm
   :config
   ;; Optionally set a default node version
   (nvm-use "21"))
 
+
+(use-package! lsp-mode)
+;; (setq magit-git-executable "/usr/local/Cellar/git/2.38.1/bin/git")
+(setq magit-git-executable "/usr/bin/git")
+;; if you installed debugpy, you need to set this
+;; https://github.com/emacs-lsp/dap-mode/issues/306
+;; (use-package! dap-mode
+;;   :after lsp-mode
+;;   :config
+;;   (require 'dap-python)
+;;   (require 'dap-ui)
+;;   (dap-mode t)
+;;   (dap-ui-mode t)
+;;   ;; enables mouse hover support
+;;   (dap-tooltip-mode t)
+;;   ;; if it is not enabled `dap-mode' will use the minibuffer.
+;;   (tooltip-mode t)
+;;   )
+(dap-auto-configure-mode)
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
+(add-hook 'dap-stopped-hook
+          (lambda (arg) (call-interactively #'dap-hydra)))
+
+(after! lsp-ui
+  (lsp-ui-doc-enable t)
+  (lsp-ui-sideline-show-diagnostic t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-sideline-show-code-actions t)
+  (setq lsp-ui-sideline-update-mode 'line)
+  (lsp-ui-peek-enable t)
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-show-with-cursor t)
+  (lsp-ui-doc-show-with-mouse t))
+
+(use-package direnv
+ :config
+ (direnv-mode))

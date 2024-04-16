@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: weekly-summary
+# uuid:
+# key: weeksum
+# condition: t
+# --
+
+
+#+BEGIN: clocktable :scope agenda :block thisweek :emphasize t indent t :step week
+#+END
