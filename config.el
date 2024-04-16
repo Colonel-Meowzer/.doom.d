@@ -197,7 +197,7 @@
 ;;   (global-tree-sitter-mode)
 ;;   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
-TODO: Figure out how to incorporate the interactive version above
+;;TODO: Figure out how to incorporate the interactive version above
 
 (defun sql-format-fix ()
   "Custom formatter for sql using sqlfluff"
@@ -324,5 +324,5 @@ TODO: Figure out how to incorporate the interactive version above
   (lsp-ui-doc-show-with-mouse t))
 
 (use-package direnv
- :config
- (direnv-mode))
+  :config
+  (direnv-mode))

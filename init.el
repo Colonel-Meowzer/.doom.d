@@ -21,7 +21,10 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
-       vertico
+       (vertico
+        +childframe
+        +icons
+        )
 
        :ui
        deft              ; notational velocity for Emacs
@@ -75,8 +78,8 @@
 
        :emacs
        (dired            ; making dired pretty [functional]
-       +ranger         ; bringing the goodness of ranger to dired
-       +icons          ; colorful icons for dired-mode
+        +ranger         ; bringing the goodness of ranger to dired
+        +icons          ; colorful icons for dired-mode
         )
        electric          ; smarter, keyword-based electric-indent
        vc                ; version-control and Emacs, sitting in a tree
@@ -104,6 +107,7 @@
         +lsp)
        magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
+       tree-sitter       ; syntax and parsing, sitting in a tree...
        ;;pass              ; password manager for nerds
        pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
@@ -142,7 +146,8 @@
        ;;lua               ; one-based indices? one-based indices
        (markdown
         +grip
-       )          ; writing docs for people to ignore
+        +tree-sitter
+        )          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
@@ -166,15 +171,18 @@
         +conda
         +lsp
         +pyright
+        +tree-sitter
         )            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        rest              ; Emacs as a REST client
        (ruby
+        +tree-sitter
         +lsp)              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        scala             ; java, but good
        (sh
+        +tree-sitter
         +lsp)                ; she sells {ba,z,fi}sh shells on the C xor
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
@@ -182,6 +190,7 @@
        ;;web               ; the tubes
        ;;vala              ; GObjective-C
        (yaml
+        +tree-sitter
         +lsp)
 
        :email
@@ -225,7 +234,7 @@
   "ESS Markdown mode for rmd files"
   (interactive)
   ;;(setq load-path
-    ;;(append (list "path/to/polymode/" "path/to/polymode/modes/")
+  ;;(append (list "path/to/polymode/" "path/to/polymode/modes/")
   ;;      load-path))
   (require 'poly-R)
   (require 'poly-markdown)
@@ -241,18 +250,18 @@
 ;;(setq org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 
 ;;(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+;; custom-set-variables was added by Custom.
+;; If you edit it by hand, you could mess it up, so be careful.
+;; Your init file should contain only one such instance.
+;; If there is more than one, they won't work right.
 ;; '(custom-safe-themes
 ;;   (quote
- ;;   ("d1b4990bd599f5e2186c3f75769a2c5334063e9e541e37514942c27975700370" "10461a3c8ca61c52dfbbdedd974319b7f7fd720b091996481c8fb1dded6c6116" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "80365dd15f97396bdc38490390c23337063c8965c4556b8f50937e63b5e9a65c" "49ec957b508c7d64708b40b0273697a84d3fee4f15dd9fc4a9588016adee3dad" "84da7b37214b4ac095a55518502dfa82633bee74f64daf6e1785322e77516f96" "75d3dde259ce79660bac8e9e237b55674b910b470f313cdf4b019230d01a982a" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "43c808b039893c885bdeec885b4f7572141bd9392da7f0bd8d8346e02b2ec8da" "6d589ac0e52375d311afaa745205abb6ccb3b21f6ba037104d71111e7e76a3fc" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" default))))
+;;   ("d1b4990bd599f5e2186c3f75769a2c5334063e9e541e37514942c27975700370" "10461a3c8ca61c52dfbbdedd974319b7f7fd720b091996481c8fb1dded6c6116" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "80365dd15f97396bdc38490390c23337063c8965c4556b8f50937e63b5e9a65c" "49ec957b508c7d64708b40b0273697a84d3fee4f15dd9fc4a9588016adee3dad" "84da7b37214b4ac095a55518502dfa82633bee74f64daf6e1785322e77516f96" "75d3dde259ce79660bac8e9e237b55674b910b470f313cdf4b019230d01a982a" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "43c808b039893c885bdeec885b4f7572141bd9392da7f0bd8d8346e02b2ec8da" "6d589ac0e52375d311afaa745205abb6ccb3b21f6ba037104d71111e7e76a3fc" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" default))))
 ;;(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+;; custom-set-faces was added by Custom.
+;; If you edit it by hand, you could mess it up, so be careful.
+;; Your init file should contain only one such instance.
+;; If there is more than one, they won't work right.
 ;; )
 ;; (setq byte-compile-warnings '(cl-functions))
 ;;; in $DOOMDIR/init.el
