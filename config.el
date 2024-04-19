@@ -273,6 +273,9 @@
 
 ;; This opens up all files on startup by default. Make sure to archive the directory every now and then
 (setq org-agenda-files '("~/org/daily/"))
+
+(setq chatgpt-shell-openai-key (getenv "OPENAI_API_KEY"))
+
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
@@ -314,15 +317,12 @@
 
 (after! lsp-ui
   (lsp-ui-doc-enable t)
-  (lsp-ui-sideline-show-diagnostic t)
-  (lsp-ui-sideline-show-hover t)
-  (lsp-ui-sideline-show-code-actions t)
-  (setq lsp-ui-sideline-update-mode 'line)
   (lsp-ui-peek-enable t)
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-show-with-cursor t)
-  (lsp-ui-doc-show-with-mouse t))
+  (lsp-ui-doc-enable t))
 
 (use-package direnv
   :config
   (direnv-mode))
+
+(global-set-key [(s down)] (lambda () (interactive) (scroll-down 1)))
+(global-set-key [(s up)] (lambda () (interactive) (scroll-up 1)))
