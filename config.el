@@ -1,12 +1,16 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
 ;; Place your private configuration here
-(load-theme 'doom-zenburn t)
+(load-theme 'tsdh-dark t)
+(setq doom-font
+      (font-spec :family "FiraCode Nerd Font" :size 12 :weight 'regular))
+
 
 ;; (set-frame-font "Fira Code" nil t)
-(set-frame-font "FiraCode Nerd Font" nil t)
+;; (set-frame-font "FiraCode Nerd Font" nil t)
 ;; (set-frame-font "DejaVu Sans ExtraLight" nil t)
 
+;; (doom-symbol-font t)
 ;; make sure numpydoc is available for python-mode
 (use-package numpydoc
   :after python
@@ -77,7 +81,9 @@
  'org-babel-load-languages
  '((R . t)
    (latex . t)
-   (dot . t)))
+   (dot . t)
+   (sh . t)
+   (python . t)))
 
 
 (setq org-roam-directory "~/org")
@@ -190,15 +196,6 @@
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 
-;; enable tree-sitter
-;; (use-package! tree-sitter
-;;   :config
-;;   (require 'tree-sitter-langs)
-;;   (global-tree-sitter-mode)
-;;   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-
-;;TODO: Figure out how to incorporate the interactive version above
-
 (defun sql-format-fix ()
   "Custom formatter for sql using sqlfluff"
   (interactive)
@@ -284,7 +281,7 @@
               ("TAB" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word))
-  :config (add-to-list `copilot-indentation-alist `(sql-mode 4)))
+  :config (add-to-list `copilot-indentation-alist `((sql-mode 4))))
 
 (use-package! nvm
   :config
@@ -293,28 +290,17 @@
 
 
 (use-package! lsp-mode)
-;; (setq magit-git-executable "/usr/local/Cellar/git/2.38.1/bin/git")
 (setq magit-git-executable "/usr/bin/git")
-;; if you installed debugpy, you need to set this
-;; https://github.com/emacs-lsp/dap-mode/issues/306
-;; (use-package! dap-mode
-;;   :after lsp-mode
-;;   :config
-;;   (require 'dap-python)
-;;   (require 'dap-ui)
-;;   (dap-mode t)
-;;   (dap-ui-mode t)
-;;   ;; enables mouse hover support
-;;   (dap-tooltip-mode t)
-;;   ;; if it is not enabled `dap-mode' will use the minibuffer.
-;;   (tooltip-mode t)
-;;   )
+
+(setq dap-auto-configure-features '(locals tooltip repl))
 (dap-auto-configure-mode)
 (after! dap-mode
+  ;; if you installed debugpy, you need to set this
+  ;; https://github.com/emacs-lsp/dap-mode/issues/306
   (setq dap-python-debugger 'debugpy))
+
 (add-hook 'dap-stopped-hook
           (lambda (arg) (call-interactively #'dap-hydra)))
-
 (after! lsp-ui
   (lsp-ui-doc-enable t)
   (lsp-ui-peek-enable t)
@@ -324,5 +310,7 @@
   :config
   (direnv-mode))
 
+;; Bind keys to scroll a buffer without moving the cursor
+;; to the edge of the buffer.
 (global-set-key [(s down)] (lambda () (interactive) (scroll-down 1)))
 (global-set-key [(s up)] (lambda () (interactive) (scroll-up 1)))
