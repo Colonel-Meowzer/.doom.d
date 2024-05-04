@@ -384,8 +384,9 @@
   :config
   (add-hook 'org-mode-hook 'org-pretty-table-mode))
 
-;; Add a custom keybinding for copying org links
-(map! :after org
-      :map org-mode-map
-      :prefix "SPC m l"
-      "C" #'embark-org-copy-link-target)
+;; Add a custom keybinding for copying links
+(map! :leader
+      :desc "Link Management"
+      (:prefix-map ("l" . "links")
+       :desc "Copy Link" "y"   #'link-hint-copy-link
+       :desc "Open Link" "l"   #'link-hint-open-link))
