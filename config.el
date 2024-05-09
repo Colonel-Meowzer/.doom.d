@@ -390,3 +390,30 @@
       (:prefix-map ("l" . "links")
        :desc "Copy Link" "y"   #'link-hint-copy-link
        :desc "Open Link" "l"   #'link-hint-open-link))
+
+;; Add conda keybindings to python mode
+(map!
+ :localleader
+ :after python
+ :map python-mode-map
+ (:prefix-map ("c" . "conda")
+  :desc "Activate"   "a" #'conda-env-activate
+  :desc "Deactivate" "d" #'conda-env-deactivate))
+
+;; LSP keybindings
+(map!
+ :leader
+ (:prefix-map ("c l" . "language server")
+  :desc "start" "l" #'lsp
+  :desc "dap-hydra" "d" #'dap-hydra))
+
+(defun org-babel-execute:civis_sql (body params)
+  "Execute a block of Nim code with org-babel."
+  (let ((in-file (org-babel-temp-file "n" ".nim"))
+        (verbosity (or (cdr (assq :verbosity params)) 0)))
+    (with-temp-file in-file
+      (insert body))
+    (org-babel-eval
+     (format "civis sql -d %s" verbosity
+             (org-babel-process-file-name in-file))
+     "")))
