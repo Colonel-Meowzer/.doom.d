@@ -1,10 +1,14 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
-;; Place your private configuration here
 (load-theme 'tsdh-dark t)
-(setq doom-font
-      (font-spec :family "FiraCode Nerd Font" :size 12 :weight 'regular))
 
+(if (featurep :system 'windows)
+    (setq doom-font
+          (font-spec :family "FiraCode NF" :size 12 :weight 'regular)))
+
+(if (featurep :system 'macos)
+    (setq doom-font
+          (font-spec :family "FiraCode Nerd Font" :size 12 :weight 'regular)))
 
 ;; (set-frame-font "Fira Code" nil t)
 ;; (set-frame-font "FiraCode Nerd Font" nil t)
@@ -244,7 +248,6 @@
                (message "%s" branch))
       (user-error "There is not current branch"))))
 
-(global-set-key (kbd "C-c g y") 'magit-add-current-buffer-to-kill-ring)
 
 ;; https://github.com/org-roam/org-roam-ui/README.md
 (use-package! websocket
@@ -406,6 +409,11 @@
  (:prefix-map ("c l" . "language server")
   :desc "start" "l" #'lsp
   :desc "dap-hydra" "d" #'dap-hydra))
+
+(map! :leader
+      :desc "Git"
+      (:prefix-map ("g" . "git")
+       :desc "Copy Branch Name" "," #'magit-add-current-buffer-to-kill-ring))
 
 (defun org-babel-execute:civis_sql (body params)
   "Execute a block of Nim code with org-babel."
