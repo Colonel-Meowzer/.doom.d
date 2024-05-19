@@ -66,3 +66,5 @@
 
 (package! ob-async)
 (package! org-pretty-table :recipe(:host github :repo "Fuco1/org-pretty-table" :files ("*.el")))
+
+(package! mc-extras)
