@@ -10,10 +10,6 @@
     (setq doom-font
           (font-spec :family "FiraCode Nerd Font" :size 12 :weight 'regular)))
 
-;; (set-frame-font "Fira Code" nil t)
-;; (set-frame-font "FiraCode Nerd Font" nil t)
-;; (set-frame-font "DejaVu Sans ExtraLight" nil t)
-
 ;; (doom-symbol-font t)
 ;; make sure numpydoc is available for python-mode
 (use-package numpydoc
@@ -30,15 +26,6 @@
             (when-let ((r (locate-dominating-file default-directory ".pyroot")))
               (setq python-pytest-executable
                     (concat "PYTHONPATH=" r " " "pytest")))))
-
-;; enable shift-select in org mode
-(setq org-support-shift-select t)
-
-;; no line numbers in org-mode
-(defun nolinum ()
-  (display-line-numbers-mode 0)
-  )
-(add-hook 'org-mode-hook 'nolinum)
 
 ;; Set up elpy minor mode to be enabled when for python-mode activated.
 ;; This needs to be done before elpy-enable
@@ -146,60 +133,6 @@
 ;;     ;; Other
 ;;     :tuple         "Tuple"))
 
-
-;; ORG HEADINGS (https://zzamboni.org/post/beautifying-org-mode-in-emacs/)
-
-;; hide marker symbols. e.g. **, //
-(setq org-hide-emphasis-markers t)
-
-;; different header sizes for different header levels
-(add-hook 'org-mode-hook 'variable-pitch-mode)
-
-;; fix indentation when using variable-pitch-mode
-(add-hook 'after-init-hook
-          (lambda ()
-            (require 'org-indent)       ; for org-indent face
-            (set-face-attribute 'org-indent nil
-                                :inherit '(org-hide fixed-pitch))))
-;; customize fonts for various headers
-(let* ((variable-tuple
-        (cond ;; ((x-list-fonts "Robotic Mono")         '(:font "Robotic Mono"))
-         ;; ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-         ;; ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-         ;; ((x-list-fonts "Verdana")         '(:font "Verdana"))
-         ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-         (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-       (base-font-color     (face-foreground 'default nil 'default))
-       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-  (custom-theme-set-faces
-   'user
-   `(org-level-8 ((t (,@headline ,@variable-tuple))))
-   `(org-level-7 ((t (,@headline ,@variable-tuple))))
-   `(org-level-6 ((t (,@headline ,@variable-tuple))))
-   `(org-level-5 ((t (,@headline ,@variable-tuple))))
-   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.15))))
-   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.2))))
-   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.25))))
-   `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline t))))))
-
-;; set monospace fonts for certain things
-(custom-theme-set-faces
- 'user
- '(org-block ((t (:inherit fixed-pitch))))
- '(org-code ((t (:inherit (shadow fixed-pitch)))))
- '(org-document-info ((t (:foreground "dark orange"))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
- '(org-link ((t (:foreground "royal blue" :underline t))))
- '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-property-value ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
- '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-
 (defun sql-format-fix ()
   "Custom formatter for sql using sqlfluff"
   (interactive)
@@ -231,12 +164,6 @@
       '(not python-mode         ; black has differing versions and is not uniform across repos.
         not sql-mode            ; sql-formatting has a ways to go
         ))
-
-;; org-download
-(require 'org-download)
-
-;; Drag-and-drop to `dired`
-(add-hook 'dired-mode-hook 'org-download-enable)
 
 
 (defun magit-add-current-buffer-to-kill-ring ()
@@ -425,3 +352,70 @@
      (format "civis sql -d %s" verbosity
              (org-babel-process-file-name in-file))
      "")))
+
+;; Minimal UI
+(package-initialize)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+;; (modus-themes-load-operandi)
+
+;; Choose some fonts
+; (set-face-attribute 'default nil :family "Iosevka")
+;; (set-face-attribute 'variable-pitch nil :family "Iosevka Aile")
+;; (set-face-attribute 'org-modern-symbol nil :family "Iosevka")
+
+;; Add frame borders and window dividers
+;; (modify-all-frames-parameters
+;;  '((right-divider-width . 40)
+;;    (internal-border-width . 40)))
+(dolist (face '(window-divider
+                window-divider-first-pixel
+                window-divider-last-pixel))
+  (face-spec-reset-face face)
+  (set-face-foreground face (face-attribute 'default :background)))
+(set-face-background 'fringe (face-attribute 'default :background))
+(with-eval-after-load 'org (global-org-modern-mode))
+;; (add-hook 'org-mode-hook 'variable-pitch-mode)
+(setq
+ ;; Edit settings
+ org-auto-align-tags nil
+ org-tags-column 0
+ org-catch-invisible-edits 'show-and-error
+ org-special-ctrl-a/e t
+ org-insert-heading-respect-content t
+
+ ;; Org styling, hide markup etc.
+ org-hide-emphasis-markers t
+ org-pretty-entities t
+
+ ;; Agenda styling
+ org-agenda-tags-column 0
+ org-agenda-block-separator ?─
+ org-agenda-time-grid
+ '((daily today require-timed)
+   (800 1000 1200 1400 1600 1800 2000)
+   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+ org-agenda-current-time-string
+ "◀── now ─────────────────────────────────────────────────")
+
+;; Ellipsis styling
+(setq org-ellipsis "…")
+(set-face-attribute 'org-ellipsis nil :inherit 'default :box nil)
+
+(global-org-modern-mode)
+
+;; enable shift-select in org mode
+(setq org-support-shift-select t)
+
+;; no line numbers in org-mode
+(defun nolinum ()
+  (display-line-numbers-mode 0)
+  )
+(add-hook 'org-mode-hook 'nolinum)
+
+;; org-download
+(require 'org-download)
+
+;; Drag-and-drop to `dired`
+(add-hook 'dired-mode-hook 'org-download-enable)
