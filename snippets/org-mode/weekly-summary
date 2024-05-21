@@ -6,5 +6,5 @@
 # --
 
 
-#+BEGIN: clocktable :scope agenda :block thisweek :emphasize t indent t :step week
-#+END
+\#+BEGIN: clocktable :scope agenda :block thisweek :emphasize t indent t :step week
+\#+END

@@ -8,9 +8,8 @@
 
 (if (featurep :system 'macos)
     (setq doom-font
-          (font-spec :family "FiraCode Nerd Font" :size 12 :weight 'regular)))
+          (font-spec :family "FiraCode Nerd Font Mono" :size 12 :weight 'regular)))
 
-;; (doom-symbol-font t)
 ;; make sure numpydoc is available for python-mode
 (use-package numpydoc
   :after python
@@ -44,13 +43,6 @@
 
 ;; org-confluence export
 ;; (require 'org-confluence)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; multiple cursors                                                       ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(global-set-key (kbd "C-c m b") 'mc/edit-beginnings-of-lines)
-(global-set-key (kbd "C-c m e") 'mc/edit-ends-of-lines)
-(global-set-key (kbd "C-c m c") 'mc/edit-lines)
 
 (require 'org)
 (require 'ox-latex)
@@ -316,6 +308,7 @@
 
 ;; Add a custom keybinding for copying links
 (map! :leader
+      ;; :desc "Direnv Allow" "p E a" #'direnv-allow
       :desc "Link Management"
       (:prefix-map ("l" . "links")
        :desc "Copy Link" "y"   #'link-hint-copy-link
@@ -335,12 +328,26 @@
  :leader
  (:prefix-map ("c l" . "language server")
   :desc "start" "l" #'lsp
-  :desc "dap-hydra" "d" #'dap-hydra))
+  :desc "dap-hydra" "d" #'dap-hydra)
+ (:prefix-map ("p E" . "direnv")
+  :desc "Allow" "a" #'direnv-allow))
+
 
 (map! :leader
       :desc "Git"
       (:prefix-map ("g" . "git")
        :desc "Copy Branch Name" "," #'magit-add-current-buffer-to-kill-ring))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; multiple cursors                                                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(map! :leader
+      :desc "Edit Lines"
+      (:prefix-map ("e" . "edit")
+       :desc "Edit Beginnings of Lines" "b" #'mc/edit-beginnings-of-lines
+       :desc "Edit Ends of Lines" "e" #'mc/edit-ends-of-lines
+       :desc "Edit Lines" "l" #'mc/edit-lines))
 
 (defun org-babel-execute:civis_sql (body params)
   "Execute a block of Nim code with org-babel."
