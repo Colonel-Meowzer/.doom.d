@@ -1,6 +1,11 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
-(load-theme 'tsdh-dark t)
+(load-theme 'doom-nord-aurora t)
+
+(setq doom-nord-aurora-brighter-comments t
+      doom-nord-aurora-brighter-modeline t
+      doom-nord-aurora-comment-bg t
+      doom-nord-aurora-region-highlight "frost")
 
 (if (featurep :system 'windows)
     (setq doom-font
@@ -8,7 +13,7 @@
 
 (if (featurep :system 'macos)
     (setq doom-font
-          (font-spec :family "FiraCode Nerd Font Mono" :size 12 :weight 'regular)))
+          (font-spec :family "Hack Nerd Font Mono" :size 12 :weight 'regular)))
 
 ;; make sure numpydoc is available for python-mode
 (use-package numpydoc
@@ -44,14 +49,14 @@
 ;; org-confluence export
 ;; (require 'org-confluence)
 
-(require 'org)
-(require 'ox-latex)
+;; (require 'org)
+;; (require 'ox-latex)
 ;; "minted" is a python library that allows for syntax highlighting when
 ;; exporting to pdf. This needs to be installed in the main python environment.
 ;;
 ;; The following configurations enable this functionality.
-(add-to-list 'org-latex-packages-alist '("" "minted"))
-(setq org-latex-listings 'minted)
+;; (add-to-list 'org-latex-packages-alist '("" "minted"))
+;; (setq org-latex-listings 'minted)
 
 (setq org-latex-pdf-process
       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
@@ -68,6 +73,9 @@
    (sh . t)
    (python . t)))
 
+
+;; Associate .jinja files with jinja2-mode
+(add-to-list 'auto-mode-alist '("\\.jinja\\'" . jinja2-mode))
 
 (setq org-roam-directory "~/org")
 (global-prettify-symbols-mode t)
@@ -213,7 +221,7 @@
 
 
 (use-package! lsp-mode)
-(setq magit-git-executable "/usr/bin/git")
+(setq magit-git-executable "/usr/local/bin/git")
 
 (setq dap-auto-configure-features '(locals tooltip repl))
 (dap-auto-configure-mode)

@@ -17,8 +17,6 @@
 
 (package! org-bullets)
 
-(package! docker-tramp)
-
 ;; poly-mode for rmd-mode
 (package! poly-R)
 (package! poly-markdown)
@@ -50,8 +48,7 @@
 
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el" "dist")))
-(package! code-cells
-  :recipe (:host github :repo "astoff/code-cells.el"))
+(package! code-cells)
 (package! jupyter)
 
 (package! nvm)
