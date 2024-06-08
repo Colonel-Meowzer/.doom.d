@@ -9,7 +9,7 @@
 
 (if (featurep :system 'windows)
     (setq doom-font
-          (font-spec :family "FiraCode NF" :size 12 :weight 'regular)))
+          (font-spec :family "Hack Nerd Font Mono" :size 12 :weight 'regular)))
 
 (if (featurep :system 'macos)
     (setq doom-font
