@@ -1,11 +1,16 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
-(load-theme 'doom-nord-aurora t)
+(load-theme 'doom-zenburn t)
 
-(setq doom-nord-aurora-brighter-comments t
-      doom-nord-aurora-brighter-modeline t
-      doom-nord-aurora-comment-bg t
-      doom-nord-aurora-region-highlight "frost")
+(setq doom-zenburn-brighter-comments t
+      doom-zenburn-brighter-modeline t
+      doom-zenburn-comment-bg t
+      doom-zenburn-padded-modeline t)
+
+;; (setq doom-nord-aurora-brighter-comments t
+;;       doom-nord-aurora-brighter-modeline t
+;;       doom-nord-aurora-comment-bg t
+;;       doom-nord-aurora-region-highlight "frost")
 
 (if (featurep :system 'windows)
     (setq doom-font
@@ -211,9 +216,22 @@
               ("TAB" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word))
-  ;; :config (add-to-list `copilot-indentation-alist `((sql-mode 4) (emacs-lisp-mode 2)))
+  :config
+  (add-to-list `copilot-indentation-alist '(sql-mode 4))
+  (add-to-list `copilot-indentation-alist '(emacs-lisp-mode 2))
+  (add-to-list `copilot-indentation-alist '(org-mode 4))
+  (add-to-list `copilot-indentation-alist '(python-mode 4))
+  (add-to-list `copilot-indentation-alist '(normal-mode 4))
+  (add-to-list `copilot-indentation-alist '(csv-mode 4))
+  (add-to-list `copilot-indentation-alist '(R-mode 4))
+  (add-to-list `copilot-indentation-alist '(yaml-mode 4))
+  (add-to-list `copilot-indentation-alist '(markdown-mode 4))
+  (add-to-list `copilot-indentation-alist '(text-mode 4))
+  (add-to-list `copilot-indentation-alist '(chatgpt-shell-mode 0))
+  (add-to-list `copilot-indentation-alist '(dockerfile-mode 0))
   )
 
+(setq tab-width 4)
 (use-package! nvm
   :config
   ;; Optionally set a default node version
@@ -237,9 +255,9 @@
   (lsp-ui-peek-enable t)
   (lsp-ui-doc-enable t))
 
-(use-package direnv
-  :config
-  (direnv-mode))
+;; (use-package direnv
+;;   :config
+;;   (direnv-mode))
 
 ;; Bind keys to scroll a buffer without moving the cursor
 ;; to the edge of the buffer.
@@ -331,6 +349,17 @@
   :desc "Activate"   "a" #'conda-env-activate
   :desc "Deactivate" "d" #'conda-env-deactivate))
 
+;; Add keybindings for code-cells
+(map!
+ :localleader
+ :after ein:ipynb-mode
+ :map ein:ipynb-mode-map
+ (:prefix-map ("c" . "code-cells")
+  :desc "convert-to-buffer"   "a" #'code-cells-convert-ipynb
+  :desc "convert-to-ipynb" "d" #'code-cells-write-ipynb))
+
+(add-hook 'python-mode-hook 'code-cells-mode-maybe)
+
 ;; LSP keybindings
 (map!
  :leader
@@ -370,6 +399,11 @@
 
 (with-eval-after-load 'org (global-org-modern-mode))
 
+;; Choose some fonts
+(set-face-attribute 'default nil :family "Hack Nerd Font Mono")
+(set-face-attribute 'variable-pitch nil :family "Hack Nerd Font Propo")
+(set-face-attribute 'org-modern-symbol nil :family "Hack Nerd Font Mono")
+;; (set-face-attribute 'org-modern-symbol nil :family "Symbols Nerd Font Mono")
 ;; enable shift-select in org mode
 (setq org-support-shift-select t)
 
@@ -384,3 +418,79 @@
 
 ;; Drag-and-drop to `dired`
 (add-hook 'dired-mode-hook 'org-download-enable)
+
+(setq copilot-chat-model "claude-3.5-sonnet")
+;;(use-package! dbt-mode
+;; Customize `sql-product' to set the flavor of the SQL syntax.
+;;  :custom (sql-product 'postgres))
+;;)
+;; dbt language server
+;; (defgroup lsp-dbt nil
+;;   "LSP support for DBT."
+;;   :link '(url-link "https://github.com/fivetran/dbt-language-server")
+;;   :group 'lsp-mode)
+
+;; (defcustom lsp-dbt-server-command '("dbt-language-server" "--stdio")
+;;   "The dbt-language-server command."
+;;   :group 'lsp-dbt
+;;   :risky t
+;;   :type 'list)
+
+;; (add-to-list 'lsp-language-id-configuration
+;;              '("/\\(dbt\\|queries\\|macros\\|dbt_modules\\)/.*\\.sql\\'" . "dbt"))
+
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection lsp-dbt-server-command)
+;;                   :activation-fn (lsp-activate-on "dbt")
+;;                   :language-id "sql"
+;;                   :server-id 'dbtls
+;;                   :initialization-options '(:pythonInfo (:path "python")
+;;                                             :lspMode "dbtProject"
+;;                                             :enableSnowflakeSyntaxCheck t
+;;                                             :disableLogger t)))
+
+;; (lsp-consistency-check lsp-dbt)
+
+(defun move-region (start end n)
+  "Move the current region up or down by N lines."
+  (interactive "r\np")
+  (let ((line-text (delete-and-extract-region start end)))
+    (forward-line n)
+    (let ((start (point)))
+      (insert line-text)
+      (setq deactivate-mark nil)
+      (set-mark start))))
+
+(defun move-region-up (start end n)
+  "Move the current line up by N lines."
+  (interactive "r\np")
+  (move-region start end (if (null n) -1 (- n))))
+
+(defun move-region-down (start end n)
+  "Move the current line down by N lines."
+  (interactive "r\np")
+  (move-region start end (if (null n) 1 n)))
+
+(global-set-key (kbd "M-<up>") 'move-region-up)
+(global-set-key (kbd "M-<down>") 'move-region-down)
+
+;; Github Models offers an OpenAI compatible API
+;; OPTIONAL configuration
+(setq gptel-model  'gpt-4o
+      gptel-backend
+      (gptel-make-openai "Github Models" ;Any name you want
+        :host "models.inference.ai.azure.com"
+        :endpoint "/chat/completions?api-version=2024-05-01-preview"
+        :stream t
+        :key (getenv "GITHUB_API_KEY")
+        :models '(gpt-4o)))
+
+
+(map!
+ :leader
+ (:prefix-map ("o g" . "gptel")
+  :desc "gptel" "g" #'gptel
+  :desc "rewrite" "r" #'gptel-rewrite))
+
+(with-eval-after-load 'gptel
+  (define-key gptel-mode-map (kbd "C-c a") #'gptel-add-file))

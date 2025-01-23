@@ -95,7 +95,7 @@
        (biblio)
        (debugger
         +lsp); FIXME stepping through code, to help you add bugs
-       ;;direnv
+       direnv
        (docker
         +lsp)
        editorconfig      ; let someone else argue about tabs vs spaces

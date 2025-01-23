@@ -67,3 +67,10 @@
 (package! mc-extras)
 
 (package! org-modern)
+
+(package! emacs-emojify)
+
+
+(package! copilot-chat :recipe(:host github :repo "chep/copilot-chat.el" :files ("*.el")))
+;; (package! dbt-mode :recipe (:host github :repo "CyberShadow/dbt-mode"))
+(package! gptel)
