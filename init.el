@@ -92,6 +92,7 @@
 
        :tools
        ;;ansible
+       (lsp)
        (biblio)
        (debugger
         +lsp); FIXME stepping through code, to help you add bugs

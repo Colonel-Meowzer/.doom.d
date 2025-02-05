@@ -1,5 +1,12 @@
 ;;; ~/.doom.d/config.el -- Base Configs
 
+(load-env-vars "~/.bash_profile")
+
+(global-diff-hl-mode)
+(require 'exec-path-from-shell)
+
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 (load-theme 'doom-zenburn t)
 
 (setq doom-zenburn-brighter-comments t
@@ -493,4 +500,8 @@
   :desc "rewrite" "r" #'gptel-rewrite))
 
 (with-eval-after-load 'gptel
-  (define-key gptel-mode-map (kbd "C-c a") #'gptel-add-file))
+  (define-key gptel-mode-map (kbd "C-c a") #'gptel-add-file)
+  (define-key gptel-mode-map (kbd "C-c b") #'gptel-add)
+  (define-key gptel-mode-map (kbd "C-c ?") #'gptel-menu))
+;; this is a test
+;; foo bar. What is the name of this?
